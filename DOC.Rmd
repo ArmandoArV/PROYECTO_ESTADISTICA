@@ -1,0 +1,11 @@
+---
+title: "DOCUMENTO"
+author: "Armando Arredondo Valle"
+date: "23/5/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+

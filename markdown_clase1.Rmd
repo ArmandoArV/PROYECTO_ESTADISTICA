@@ -1,0 +1,190 @@
+---
+title: "T1"
+author: "Armando Arredondo Valle"
+date: "19/5/2022"
+output: 
+  html_document: 
+    toc: yes
+---
+# Personalizando nuestra sesión
+
+```{r setup, include=TRUE}
+knitr::opts_chunk$set(echo = TRUE)
+
+options(digits=3,papersize = "letter")  
+# https://stat.ethz.ch/R-manual/R-devel/library/base/html/options.html
+
+
+# Opciones globales en graficas
+par(mar=c(5.1,5,4.1,2.1),font=3,family="sans",bg="yellow")   
+
+# En R existen varios conjuntos de datos:
+
+# install.packages("datasets.load")
+# datasets.load::alldata()   # O bien library(datasets.load); alldata()
+
+# data(package = .packages(all.available = TRUE)) 
+# Si marca error en la version de "htmltools", instalarlo de nuevo.
+# R sugerira el reinicio de su sesion, aceptarla.
+
+```
+
+# Problema a estudiar
+
+Se tienen las mediciones de la calidad diaria del aire en la ciudad de Nueva York desde Mayo hasta Septiembre de 1973.
+
+Las variables que se registraron son:
+
+* Ozone: medición del ozono en partes por billón (ppb) en la isla de Roosevelt
+La medición de la concentración de ozono en el aire se puede
+efectuar mediante diferentes técnicas e instrumental como los monitores automáticos de absorción ultravioleta.
+* Solar.R: 	radiación solar (en Langleys) medida en la banda de frecuencia de 4000-7700 Angstroms al mediodía en Central Park.
+*	Wind: velocidad media del viento (mph) entre las 7-10 am en el aeropuerto de LaGuardia.
+* Temp: temperatura máxima diaria (en °F)	
+* Month	numeric	Month (1--12)
+* Day	numeric	Day of month (1--31)
+## Lectura y manejo de datos
+
+Antes de realizar el análisis estadístico más adecuado es conveniente revisar:
+
+1. Que la información de todas las variables sea completa
+2. Que nuestra elección esté de acuerdo con el tipo de variable y su escala de medición para ¡no meter la pata!
+
+````{r, include=TRUE}
+
+library(datasets)
+data("airquality")   # ver el conjunto de datos de interes
+
+datos1<- airquality  # para guardarlos como objeto
+
+head(datos1)    # ver los primeros 6 renglones del conjunto de datos
+tail(datos1)    # ver los ultimos 6 renglones del conjunto de datos
+dim(datos1)
+names(datos1)
+str(datos1)
+mode(datos1)
+
+# Exploremos algunas variables
+
+datos1$Temp   # llamamos a la variable "Temp"
+datos1[,3] # da la columna 3
+
+datos1[3,] # da el renglon 3
+
+datos1[1:10,3:6]  # para seleccionar una parte de los datos
+
+# COMENTARIO: Si llamamos a la variable solo por su nombre, es decir, Temp y luego operamos con ella, por ejemplo, Temp+12
+# MARCARA ERROR AL TEJER!
+
+# Solucion.....
+
+attach(datos1) # con el attach ya puedo accesar a los nombres de las variables
+
+Temp
+
+(Temp-32)*(5/9)  # Centigrados
+
+# OJO: el problema con attach es que si manejo 2 o mas bases de datos 
+# distintas, y estas comparten el mismo nombre de las columnas, R se 
+# hace bolas y no sabra exactamente a que base de datos se refiere.
+
+#detach(datos1) # para decirle a R que ya NO usare esa base de datos
+
+````
+Antes de realizar el análisis descriptivo, limpiemos, ordenemos y cambiemos el nombre de las variables.
+
+````{r}
+
+library(dplyr)
+
+datos1<- select(datos1, Month, Day, Ozone, Temp, Solar.R, Wind)
+
+#        NUEVO                 # ANTERIOR
+datos2<- rename(datos1, Ozono       = Ozone,
+       Radiacion  = Solar.R,
+       Viento     = Wind,
+       Temperatura= Temp,
+       Mes        = Month,
+       Dia        = Day)
+
+names(datos2)
+attach(datos2)  # para que reconozca las variables solo por su nombre,
+                # de lo contrario hay que escribir datos2$Viento
+
+````
+
+Revisión "rápida" del conjunto de datos:
+
+````{r}
+
+# install.packages("skimr")
+skimr::skim(datos2)
+
+````
+
+Velocidad del viento (km/h)   |  Descripción EU
+------------------------------|------------------------------
+     	$0-1$                   |    Calma	
+	    $2-5$	                  |    Ventolina	
+	    $6-11$	                |    Brisa suave	
+	    $12-19$	                |    Brisa ligera		
+	    $20-28$	                |    Brisa moderada		
+	    $29-38$	                |    Brisa fresca		
+	    $39-49$	                |    Brisa fuerte		
+	    $50-61$	                |    Viento fuerte		
+	    $62-74$	                |    Viento duro	
+	    $75-88$	                |    Viento muy duro	
+	    $89-102$	              |    Temporal		
+	    $103-117$	              |    Temporal muy duro (borrasca)
+	     $> 118$	              |    Huracán	
+
+````{r}
+
+TipoViento <- NA
+TipoViento[Viento >= 0 & Viento <= 1.6093] <- "Calma"   
+TipoViento[Viento > 1.6093 & Viento <= 1.6093*5] <- "Ventolina"  
+TipoViento[Viento > 1.6093*5 & Viento <= 1.6093*11] <- "Brisa suave"    
+TipoViento[Viento > 1.6093*11 & Viento <= 1.6093*19] <- "Brisa ligera" 
+TipoViento[Viento > 1.6093*19 & Viento <= 1.6093*28] <- "Brisa moderada" 
+TipoViento[Viento > 1.6093*28 & Viento <= 1.6093*38] <- "Brisa fresca"
+
+TipoViento
+
+# Ahora si ordenamos las columnas
+datos2<- cbind(datos2,TipoViento)
+
+datos<- select(datos2, Mes, Ozono)  # library(dplyr)
+
+head(datos)
+````
+
+Examinemos si hay datos faltantes.
+
+````{r}
+library(naniar)
+
+pct_miss(datos2)
+
+vis_miss(datos2) 
+
+````
+
+
+## Tipo de variable y escala de medición
+
+### Identificación de las variables
+
+Variable    | Tipo                   | Escala de medición
+------------|------------------------|--------------------
+Mes         | cualitativa            | nominal
+Dia         | cualitativa            | nominal
+Ozono       | cuantitativa/continua  | razón
+Temperatura | cuantitativa/continua  | intervalo
+Radiacion   | cuantitativa/continua  | razón
+Viento      | cuantitativa/continua  | razón
+TipoViento  | cualitativa            | ordinal    
+
+
+
+
+
