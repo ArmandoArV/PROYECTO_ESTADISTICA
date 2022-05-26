@@ -4,6 +4,8 @@ library("skimr")
 library("naniar")
 library("Hmisc")
 library("corrplot")
+library(psych)
+
 analyze = readxl::read_excel(sheet=1, path = "./datos.xlsx");
 analyze2 = readxl::read_excel(sheet=4, path = "./datos.xlsx");
 # getwd()
@@ -25,4 +27,6 @@ pct_miss(limpios2)
 vis_miss(limpios2) 
 correlation2 = rcorr(as.matrix(limpios2)) #matriz de correlación
 CORRELATION_ANALYSYS2 = correlation2[["r"]]
+
+CORRELATION_ANALYSYS
 

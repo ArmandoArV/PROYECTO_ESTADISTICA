@@ -1,11 +1,49 @@
 ---
-title: "DOCUMENTO"
+title: "ANALISIS ESTADISTICO"
 author: "Armando Arredondo Valle"
 date: "23/5/2022"
 output: html_document
 ---
-
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+
+## Introducción:
+<div>
+  <style>
+    p{
+      text-align:justify;
+    }
+  </style>  
+  <p>
+  En este proyecto, buscamos realizar el análisis de los datos para una empresa la cual presenta un problema de materiales, en la cual existe una tendencia en la falla de materiales con base a que el personal capacitado..
+
+  </p>  
+</div>
+
+<h3> Librerias a utilizar </h3> 
+```{r eval=FALSE}
+  library("readxl")
+  library("skimr")
+  library("naniar")
+  library("Hmisc")
+  library("corrplot")
+```
+
+<h2> Tablas de análisis </h2>
+
+<h3> Tabla 1:
+```{r echo=FALSE}
+  analyze = readxl::read_excel(sheet=1, path = "./datos.xlsx");
+  analyze
+```
+
+<h3> Tabla 2 </h3>
+
+```{r echo=FALSE}
+  analyze2 = readxl::read_excel(sheet=4, path = "./datos.xlsx");
+  analyze2
+```
+
+
 
