@@ -174,6 +174,9 @@ pre code {
 
 </div>
 
+<div id="TOC">
+true
+</div>
 
 <div id="introducción" class="section level2">
 <h2>Introducción:</h2>
@@ -190,53 +193,32 @@ pre code {
 <h3>
 Librerias a utilizar
 </h3>
-<pre class="r"><code>  library(&quot;readxl&quot;)
-  library(&quot;skimr&quot;)
-  library(&quot;naniar&quot;)
-  library(&quot;Hmisc&quot;)
-  library(&quot;corrplot&quot;)</code></pre>
+<pre class="r"><code>library(&quot;skimr&quot;)
+library(&quot;naniar&quot;)
+library(&quot;Hmisc&quot;)
+library(&quot;corrplot&quot;)
+library(&quot;psych&quot;)
+library(&quot;dplyr&quot;)
+library(&quot;GGally&quot;)</code></pre>
 <h2>
 Tablas de análisis
 </h2>
 <h3>
 <p>Tabla 1:</p>
-<pre><code>## # A tibble: 24 x 7
-##      Mes `Piezas producid~`     A1 `Piezas Produc~`    B1 `Piezas Produc~`    C1
-##    &lt;dbl&gt;              &lt;dbl&gt;  &lt;dbl&gt;            &lt;dbl&gt; &lt;dbl&gt;            &lt;dbl&gt; &lt;dbl&gt;
-##  1     1             300000 157800            40000  1100           200000 78050
-##  2     2             300000  57400            40000  2100           200000 63350
-##  3     3             300000  85800            40000  1200           200000 74900
-##  4     4             300000  12400            40000  2200           200000 72450
-##  5     5             300000  45600            40000  1900           200000 87150
-##  6     6             300000  22100            40000  4000           200000 96250
-##  7     7             300000 163700            40000  2700           200000 91000
-##  8     8             300000 166300            40000  3800           200000 85400
-##  9     9             300000  94100            40000  2700           200000 65800
-## 10    10             300000 192800            40000  4800           200000 65450
+<pre><code>## # A tibble: 24 x 3
+##    `DEFECTUOSAS A` `DEFECTUOSAS B` `DEFECTUOSAS C`
+##              &lt;dbl&gt;           &lt;dbl&gt;           &lt;dbl&gt;
+##  1          157800            1100           78050
+##  2           57400            2100           63350
+##  3           85800            1200           74900
+##  4           12400            2200           72450
+##  5           45600            1900           87150
+##  6           22100            4000           96250
+##  7          163700            2700           91000
+##  8          166300            3800           85400
+##  9           94100            2700           65800
+## 10          192800            4800           65450
 ## # ... with 14 more rows</code></pre>
-<h3>
-Tabla 2
-</h3>
-<pre><code>## New names:
-## * `°C` -&gt; `°C...2`
-## * `°C` -&gt; `°C...3`
-## * `°C` -&gt; `°C...4`
-## * `°C` -&gt; `°C...6`
-## * `°C` -&gt; `°C...8`</code></pre>
-<pre><code>## # A tibble: 101 x 10
-##    Bar   `°C...2` `°C...3` `°C...4` rpm   `°C...6` `m/s`    `°C...8` `--`  `%`  
-##    &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt;    &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt;    &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;
-##  1 A     B        C        D        E     F        G        H        I     Y    
-##  2 71    228      208      197      115   180      5.35665~ 125      1     29.3~
-##  3 24    230      194      204      117   120      2.19600~ 45       1     40.9~
-##  4 22    219      238      231      84    143      0.61319~ 110      3     45.8~
-##  5 68    223      250      206      83    175      2.87469~ 77       1     15.7~
-##  6 22    246      252      238      116   121      1.6393   56       3     39.8~
-##  7 20    253      199      204      126   122      1.6732   54       1     42.0~
-##  8 67    233      248      248      119   171      4.5103   110      3     21.7~
-##  9 68    198      245      242      115   113      3.60340~ 104      1     34.9~
-## 10 18    203      200      220      80    173      0.30420~ 111      1     49.9~
-## # ... with 91 more rows</code></pre>
 </div>
 
 

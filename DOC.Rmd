@@ -2,6 +2,7 @@
 title: "ANALISIS ESTADISTICO"
 author: "Armando Arredondo Valle"
 date: "23/5/2022"
+toc: True
 output: html_document
 ---
 ```{r setup, include=FALSE}
@@ -23,27 +24,38 @@ knitr::opts_chunk$set(echo = TRUE)
 
 <h3> Librerias a utilizar </h3> 
 ```{r eval=FALSE}
-  library("readxl")
-  library("skimr")
-  library("naniar")
-  library("Hmisc")
-  library("corrplot")
+
+library("skimr")
+library("naniar")
+library("Hmisc")
+library("corrplot")
+library("psych")
+library("dplyr")
+library("GGally")
 ```
 
+```{r include=FALSE}
+
+library("skimr")
+library("naniar")
+library("Hmisc")
+library("corrplot")
+library("psych")
+library("dplyr")
+library("GGally")
+```
 <h2> Tablas de análisis </h2>
 
 <h3> Tabla 1:
-```{r echo=FALSE}
-  analyze = readxl::read_excel(sheet=1, path = "./datos.xlsx");
-  analyze
-```
-
-<h3> Tabla 2 </h3>
 
 ```{r echo=FALSE}
-  analyze2 = readxl::read_excel(sheet=4, path = "./datos.xlsx");
-  analyze2
+analyze = readxl::read_excel(sheet=1, path = "./datos.xlsx");
+limpios = analyze %>% select(-Mes,-"Piezas producidas A",-"Piezas Producidas B",-"Piezas Producidas C")
+colnames(limpios) <- c("DEFECTUOSAS A","DEFECTUOSAS B","DEFECTUOSAS C");
+limpios
 ```
+
+
 
 
 

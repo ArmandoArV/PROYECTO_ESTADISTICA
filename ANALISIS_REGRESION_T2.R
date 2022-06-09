@@ -1,5 +1,5 @@
 # analyze2 = readxl::read_excel(sheet=3, path = paste(getwd(),"/ORIGINAL.xlsx", sep=""), skip=1);
-colnames(analyze2) <- c("Pressure", "PlasticPumpTemperature", "PlasticMixerTemperature", "ScrewTemperature", "ScrewRPM", "BarrelTemperature", "ExtrusionVelocity", "CoolerTemperature", "RawMaterialType", "ErrorPercentage");
+#colnames(analyze2) <- c("Pressure", "PlasticPumpTemperature", "PlasticMixerTemperature", "ScrewTemperature", "ScrewRPM", "BarrelTemperature", "ExtrusionVelocity", "CoolerTemperature", "RawMaterialType", "ErrorPercentage");
 correlationMatrix = corrplot::corrplot(cor(analyze2));
 x = analyze2$Pressure 
 y = analyze2$ExtrusionVelocity 
@@ -31,4 +31,5 @@ print(linearRegressionStatus);
 estimateCoefficients = linearRegressionStatus$coefficients;
 print(estimateCoefficients);
 plot(linearRegression);
+
 
