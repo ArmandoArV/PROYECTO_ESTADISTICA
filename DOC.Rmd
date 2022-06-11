@@ -32,6 +32,7 @@ library("corrplot")
 library("psych")
 library("dplyr")
 library("GGally")
+library("kableExtra")
 ```
 
 ```{r include=FALSE}
@@ -43,10 +44,12 @@ library("corrplot")
 library("psych")
 library("dplyr")
 library("GGally")
+library("kableExtra")
+
 ```
 <h2> Tablas de análisis </h2>
 
-<h3> Tabla 1:
+<h3> Tabla 1: <h3>
 
 ```{r echo=FALSE}
 analyze = readxl::read_excel(sheet=1, path = "./datos.xlsx");
@@ -55,6 +58,18 @@ colnames(limpios) <- c("DEFECTUOSAS A","DEFECTUOSAS B","DEFECTUOSAS C");
 limpios
 ```
 
+<h3> Tabla 2: <h3>
+```{r echo=FALSE}
+
+
+analyze2 = readxl::read_excel(sheet=3, path = "./ORIGINAL.xlsx",skip=1);
+
+colnames(analyze2) <- c("Pressure", "PlasticPumpTemperature", "PlasticMixerTemperature", "ScrewTemperature", "ScrewRPM", "BarrelTemperature", "ExtrusionVelocity", "CoolerTemperature", "RawMaterialType", "ErrorPercentage");
+analyze2 %>%
+  kbl() %>%
+  kable_styling()
+
+```
 
 
 

@@ -1,0 +1,11 @@
+name: Publish Document
+title:
+username:
+account: rpubs
+server: rpubs.com
+hostUrl: rpubs.com
+appId: https://api.rpubs.com/api/v1/document/913029/2955ee16fb2e4a82a2fc05b781858e95
+bundleId: https://api.rpubs.com/api/v1/document/913029/2955ee16fb2e4a82a2fc05b781858e95
+url: http://rpubs.com/ArmandoAV/913029
+when: 1654969347.03441
+lastSyncTime: 1654969347.03441

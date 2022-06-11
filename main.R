@@ -72,3 +72,4 @@ multi.hist(x=PERCENTAGE, dcol=c("blue", "red"), dlty=c("dotted", "solid"), lwd=c
 cor_clean2 = cor(analyze2)
 corrplot(cor_clean2,method = 'color',order="alphabet",addCoef.col = 'black')
   
+

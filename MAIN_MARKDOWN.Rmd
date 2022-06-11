@@ -1,0 +1,314 @@
+---
+title: "PROBLEMA AUTOMOTRIZ"
+author: "Análisis estadístico"
+date: "23/5/2022"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    df_print: paged
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### Integrantes:
+<div>
+  <ul>
+    <li>A01424709, Armando Arredondo Valle</li>
+    <li>A01424732, Emiliano Vivas Rodríguez</li>
+    <li>A01424731, Aldo Olascoaga Olmedo</li>
+    <li>A01423655, Diego Efraín Antonio Pérez</li>
+  </ul>
+
+</div>
+
+<div>
+  <p>
+  <center>
+  ![](FOTOS/LOGO.svg){width=100px}
+  </center>
+  </p>
+</div>
+
+## Introducción:
+<div>
+  <style>
+    p{
+      text-align:justify;
+    }
+  </style>  
+  <p>
+  En este proyecto, buscamos realizar el análisis de los datos para una empresa la cual presenta un problema de materiales, en la cual existe una tendencia en la falla de creación y desarrollo de los materiales. Con el uso de la estadística podremos presentarle al cliente la razón de las fallas constantes.
+
+  </p>  
+</div>
+
+### Librerias a utilizar
+```{r eval=FALSE}
+
+library("skimr")
+library("naniar")
+library("Hmisc")
+library("corrplot")
+library("psych")
+library("dplyr")
+library("GGally")
+library("kableExtra")
+```
+
+```{r include=FALSE}
+
+library("skimr")
+library("naniar")
+library("Hmisc")
+library("corrplot")
+library("psych")
+library("dplyr")
+library("GGally")
+library("kableExtra")
+
+```
+
+
+## Tablas de análisis {.tabset}
+
+<div>
+  <style>
+    p{
+      text-align:justify;
+    }
+  </style>
+  <p> 
+    Aquí se muestran dos tablas con la información recabada de la situación problema, es necesario especificar que fué necesario realizar una "limpieza" de datos, esto con el fin de que no existiera problema al realizar los procedimientos de análisis. Así como fué necesario el cambio de nombres de algunas columnas (Cambio en los nombres de piezas defectuosas, así como en la información de las máquinas) junto con la eliminación de otras (Eliminación de forma individual de piezas producidas). 
+  
+  Nota:  Solo se muestran los primeros datos, esto para tener una mejor visualización del documento. Así mismo, en lo que abarca el documento, la tabla de "histórico de defectos" será llamada como Tabla 1, y la tabla de "datos de muestreo" será llamada como Tabla 2.
+  </p>
+</div>
+
+### TABLA DE HISTÓRICO DE DEFECTOS:
+
+```{r echo=FALSE}
+analyze = readxl::read_excel(sheet=1, path = "./datos.xlsx");
+limpios = analyze %>% select(-Mes,-"Piezas producidas A",-"Piezas Producidas B",-"Piezas Producidas C")
+colnames(limpios) <- c("DEFECTUOSAS A","DEFECTUOSAS B","DEFECTUOSAS C");
+dt1 = limpios[1:5,1:3]
+
+kbl(dt1) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"),fixed_thead = T,font_size = 12)
+```
+
+### TABLA DE DATOS DE MUESTREO:
+```{r echo=FALSE}
+
+
+analyze2 = readxl::read_excel(sheet=3, path = "./ORIGINAL.xlsx",skip=1);
+
+colnames(analyze2) <- c("Pressure", "PlasticPumpTemperature", "PlasticMixerTemperature", "ScrewTemperature", "ScrewRPM", "BarrelTemperature", "ExtrusionVelocity", "CoolerTemperature", "RawMaterialType", "ErrorPercentage");
+
+dt2 = analyze2[1:5,1:6]
+
+kbl(dt2) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"),fixed_thead = T,font_size = 12)
+```
+
+
+## Análisis de los datos
+
+<div>
+  <style>
+    p{
+      text-align:justify;
+    }
+  </style>
+  <p> 
+    Para realizar el análisis de los datos se optaron por diversos procedimientos tales como:
+      <ul>
+        <li>Verificación de falta de datos.</li>
+        <li>Análisis general de verificación de datos. (Data Summary)</li>
+        <li>Análisis de correlación de cada variable</li>
+        <li>Gráficas de pares</li>
+        <li>Gráficas individuales de cada variable</li>
+        <li></li>
+      </ul>
+  </p>
+</div>
+
+## Graficación de pérdidas {.tabset .tabset-fade .tabset-pills}
+<div>
+  <style>
+    p{
+      text-align:justify;
+    }
+  </style>
+  <p> 
+    Tras haber realizado el análisis general de los datos, pudimos apreciar que el 100% de los datos para cada categoría estaban presentes.
+  </p>
+</div>
+### Pérdidas de la Tabla 1:
+```{r echo=FALSE}
+vis_miss(limpios)
+```
+
+### Pérdidas Tabla 2:
+```{r echo=FALSE}
+vis_miss(analyze2)
+```
+
+
+## Data summary {.tabset .tabset-fade .tabset-pills}
+<div>
+  <style>
+    p{
+      text-align:justify;
+    }
+  </style>
+  <p> 
+      En lo que respecta el data summary, utilizando la libreria skimr, revisamos datos generales de cada variable, esto con el fin de tener una mejor perspectiva de los datos.
+  </p>
+</div>
+### Data summary Tabla 1:
+```{r echo=FALSE}
+  render = knitr::normal_print
+  dete = skimr::skim(limpios) 
+  kbl(dete) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"),fixed_thead = T,font_size = 12)
+```
+### Data summary Tabla 2:
+```{r echo=FALSE}
+  render = knitr::normal_print
+  demte = skimr::skim(analyze2) 
+  kbl(demte) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"),fixed_thead = T,font_size = 12)
+```
+```{r include=FALSE}
+# Análisis
+DEFECTUOSAS_A = as.numeric(limpios$`DEFECTUOSAS A`)
+DEFECTUOSAS_B = as.numeric(limpios$`DEFECTUOSAS B`)
+DEFECTUOSAS_C = as.numeric(limpios$`DEFECTUOSAS C`)
+
+DEF_A = na.omit(DEFECTUOSAS_A)
+DEF_B = na.omit(DEFECTUOSAS_B)
+DEF_C = na.omit(DEFECTUOSAS_C)
+
+#PERCENTAGE
+PER = as.numeric(analyze2$ErrorPercentage)
+PERCENTAGE = na.omit(PER)
+
+
+#EXTRUSIÓN
+EXTRU = as.numeric(analyze2$ExtrusionVelocity)
+EXTRUSION = na.omit(EXTRU)
+
+MATE = analyze2$RawMaterialType
+```
+
+### Análisis de correlación de la Extrusión contra la Velocidad
+```{r echo=FALSE}
+  Correlacion = cor(EXTRUSION, PERCENTAGE, method="pearson")
+  test = cor.test(EXTRUSION, PERCENTAGE) #
+  test
+```
+
+
+## Gráficas de pares para las piezas defectuosas {.tabset .tabset-fade .tabset-pills}
+
+<div>
+  <style>
+    p{
+      text-align:justify;
+    }
+  </style>
+  <p> 
+      En este apartado podemos apreciar las gráficas de pares para cada variable, obteniendo cada uno de los índices de correlación para cada variable, teniendo una de C con B de índice negativo, así como C con A.
+  </p>
+</div>
+
+### Gráficas de pares (A)
+```{r echo=FALSE}
+  pairs(limpios)
+```
+
+### Gráfica de pares (B)
+```{r echo=FALSE}
+  ggpairs(limpios)
+```
+
+## Histogramas múltiples de cada pieza defectuosa {.tabset .tabset-fade .tabset-pills}
+<div>
+  <style>
+    p{
+      text-align:justify;
+    }
+  </style>
+  <p> 
+    Aquí podemos apreciar los histogramas múltiples de las piezas defectuosas, en el que la gráfica azul es nuestro resultado, sin embargo podemos ver que hay una clara diferencia en las gráficas de pieza defectuosas A y B, pero, podemos ver que la gráfica de pieza C es la que podemos ver que se acerca más al resultado esperado.
+  </p>
+</div>
+
+
+### Piezas defectuosas A
+```{r echo=FALSE}
+  multi.hist(x=DEF_A, dcol=c("blue", "red"), dlty=c("dotted", "solid"), lwd=c(2, 1), main = c("DEFECTUOSAS PIEZA A"))
+```
+
+
+### Piezas defectuosas B
+```{r echo=FALSE}
+  multi.hist(x=DEF_B, dcol=c("blue", "red"), dlty=c("dotted", "solid"), lwd=c(2, 1), main = c("DEFECTUOSAS PIEZA B"))
+```
+
+### Piezas defectuosas C
+
+```{r echo=FALSE}
+
+  multi.hist(x=DEF_C, dcol=c("blue", "red"), dlty=c("dotted", "solid"), lwd=c(2, 1), main = c("DEFECTUOSAS PIEZA C"))
+```
+
+## Análisis de correlación para piezas defectuosas
+
+<div>
+  <style>
+    p{
+      text-align:justify;
+    }
+  </style>
+  <p> 
+    Podemos observar de forma más gráfica un análisis de correlación más parcial en lo que respecta a cada una de las piezas defectuosas. En el que podemos ver que es mínima la relación entre las variables.
+  </p>
+</div>
+
+### Datos limpios
+```{r echo=FALSE}
+cor_clean = cor(limpios)
+corrplot(cor_clean,method = 'color',order="alphabet",addCoef.col = 'black')
+```
+
+
+## Gráfica de pares en los datos de piezas {.tabset .tabset-fade .tabset-pills}
+
+<div>
+  <style>
+    p{
+      text-align:justify;
+    }
+  </style>
+  <p> 
+    En este apartado tenemos las gráficas de pares, en el que la gráfica A es una visión general de todas las variables de la Tabla 2, sin embargo la gráfica B apreciamos una tabla general con los índices de correlación para cada una de las variables, tomando así en variables para remarcar la Velocidad de Extrusión con la Presión; de igual forma es importante señalar el alto índice negativo del Plastic Mixer Temperature con el porcentaje de error del mismo.
+  </p>
+</div>
+### Gráfica de pares (A)
+```{r echo=FALSE}
+  pairs(analyze2)
+```
+
+### Gráfica de pares (B)
+```{r echo=FALSE}
+  ggpairs(analyze2,upper = list(continuous = wrap("cor", size = 2.5)))
+```
+
+### Histograma múltiple (PORCENTAJE)
+```{r echo=FALSE}
+  multi.hist(x=PERCENTAGE, dcol=c("blue", "red"), dlty=c("dotted", "solid"), lwd=c(2, 1), main = c("PORCENTAJE"))
+```
+
